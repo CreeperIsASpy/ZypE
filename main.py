@@ -1,8 +1,9 @@
 from ursina import *
 from src.config import Config as conf
 
-app = Ursina(icon='assets/zype.ico', borderless=False, fullscreen=False, development=conf.DEBUG)
-window.fullscreen = True
+app = Ursina(title='Zype', borderless=False, development=conf.DEBUG)
+window.icon = 'assets/zype.ico'
+window.fullscreen = False
 
 from src.components import splash, spawner
 from src.maps import map_home
