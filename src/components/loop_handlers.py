@@ -5,34 +5,43 @@ class LoopHandlers:
     def __init__(self, **kwargs):
         self.__dict__.update(kwargs)
 
-    def handle_movement(self, dt):
+    def handle_movement(self, player):
         """处理玩家的移动输入和物理碰撞"""
         # X 轴移动逻辑
         dx = held_keys['right arrow'] - held_keys['left arrow']
         if dx != 0:  # 只有按键时才计算
-            self.player.x += dx * dt * conf.SPEED
-            if self.player.intersects().hit:
-                self.player.x -= dx * dt * conf.SPEED
+            player.x += dx * time.dt * conf.SPEED
+            if player.intersects().hit:
+                player.x -= dx * time.dt * conf.SPEED
 
         # Y 轴移动逻辑
         dy = held_keys['up arrow'] - held_keys['down arrow']
         if dy != 0:
-            self.player.y += dy * dt * conf.SPEED
-            if self.player.intersects().hit:
-                self.player.y -= dy * dt * conf.SPEED
+            player.y += dy * time.dt * conf.SPEED
+            if player.intersects().hit:
+                player.y -= dy * time.dt * conf.SPEED
+
+    def constrain_player(self, player):
+        """限制玩家不跑出地图边界 (左下角对齐)"""
+
+        map_origin_x = player.map.x
+        map_origin_y = player.map.y
+
+        map_w = player.map.size[0]
+        map_h = player.map.size[1]
+
+        min_x = map_origin_x
+        max_x = map_origin_x + map_w - player.scale_x
+
+        min_y = map_origin_y
+        max_y = map_origin_y + map_h - player.scale_y
+
+        # 执行限制
+        player.x = clamp(player.x, min_x, max_x)
+        player.y = clamp(player.y, min_y, max_y)
 
 
-    def constrain_player(self):
-        """限制玩家不跑出地图边界"""
-        limit_x = (conf.WORLD_SIZE / 2) - (self.player.scale_x / 2)
-        limit_y = (conf.WORLD_SIZE / 2) - (self.player.scale_y / 2)
-
-        # 修正：原代码中 player.x 用了 limit_y，这里建议对应清楚
-        self.player.x = clamp(self.player.x, -limit_x, limit_x)
-        self.player.y = clamp(self.player.y, -limit_y, limit_y)
-
-
-    def update_camera(self):
+    def update_camera(self, player):
         """相机跟随逻辑"""
-        camera.x = self.player.x
-        camera.y = self.player.y
+        camera.x = player.x
+        camera.y = player.y

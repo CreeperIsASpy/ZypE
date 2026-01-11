@@ -3,21 +3,26 @@ from ursina import *
 from random import randint, choice
 
 from src.config import Config as conf
+from src.sprites.player import Player
 
 player = None
 
-def player_spawner(limit):
+def player_spawner(map, limit, is_random=True, *position):
     global player
-    player = Entity(model='quad', texture='textures/me', scale=(256 / 318 * 1.19, 1 * 1.19), collider='box')
-    for _ in range(100):
-        rx = randint(-limit, limit)
-        ry = randint(-limit, limit)
+    player = Player(map)
+    if is_random:
+        for _ in range(100):
+            rx = randint(-limit, limit)
+            ry = randint(-limit, limit)
 
-        player.position = (rx, ry)
+            player.position = (rx, ry)
 
-        hit_info = player.intersects(ignore=[player,])
-        if not hit_info.hit:
-            return
+            hit_info = player.intersects(ignore=[player, ])
+            if not hit_info.hit:
+                return player
+    else:
+        player.position = position
+        return player
 
     raise RuntimeError("Cannot Spawn Player")
 
@@ -31,22 +36,23 @@ def random_entities_spawner(limit, times=10, steps=100,  *args, **kwargs):
             current_pos = (int(walker_x), int(walker_y))
 
             if current_pos not in visited_positions:
-                wall = Entity(x=walker_x, y=walker_y, *args, **kwargs)
+                ent = Entity(x=walker_x, y=walker_y, *args, **kwargs)
 
                 visited_positions.add(current_pos)
-                cubes.append(wall)
+                cubes.append(ent)
 
-            direction = choice([(0, 1), (0, -1), (1, 0), (-1, 0)])
+            direction = choice(conf.WALKER_DIRECTIONS)
             walker_x += direction[0]
             walker_y += direction[1]
 
             walker_x = clamp(walker_x, -limit, limit)
             walker_y = clamp(walker_y, -limit, limit)
 
-def background_displayer(*args, **kwargs) -> Entity:
+def background_displayer(size, *args, **kwargs) -> Entity:
     background = Entity(
-        scale=(conf.WORLD_SIZE, conf.WORLD_SIZE),
-        texture_scale=(conf.WORLD_SIZE, conf.WORLD_SIZE),
+        origin=(-0.5, -0.5),
+        scale=(size[0], size[1]),
+        texture_scale=(size[0], size[1]),
         z=1,
         *args, **kwargs
     )

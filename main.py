@@ -1,33 +1,17 @@
 from ursina import *
 from src.config import Config as conf
 
-app = Ursina(title='Zype', borderless=False, development=conf.DEBUG)
-window.icon = 'assets/zype.ico'
-window.fullscreen = False
+app = Ursina(title='Zype', borderless=False, development_mode=conf.DEBUG)
+from src.components.game import Game
+game = Game()
+game.start()
 
-from src.components import splash, spawner
-from src.maps import map_home
-
-spawner.player_spawner(conf.SPAWN_LIMIT)
-conf.setup(conf, spawner.player)
-
-map = map_home.Home(spawner.player)
-
+# 绑定到生命周期函数
 def update():
-    if not splash.splashed:
-        return
-
-    dt = time.dt
-
-    conf.loop_handlers.handle_movement(dt)
-    conf.loop_handlers.constrain_player()
-    conf.loop_handlers.update_camera()
-
+    game.lc_update()
 
 def input(key):
-    if key == 'escape':
-        quit()
-    elif key == 'enter':
-        conf.input_handlers.handle_interaction()
+    game.lc_input(key)
+
 
 app.run()
