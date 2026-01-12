@@ -49,7 +49,6 @@ class Config:
 
         invoke(splash.end_splash, delay=self.SPLASH_TIME)
 
-        dialog.toggle_dialog(False)
 
         self.input_handlers = InputHandler(player=map.player)
         return self

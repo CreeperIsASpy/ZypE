@@ -23,7 +23,7 @@ class Home(Map):
                                  origin=(-0.5, -0.5),
                                  texture="assets/textures/save_point",
                                  scale=(1, 1), model="quad",
-                                 x=4.5, y=0.5, z=0.5, collider='box', name="save_point", tag=self)
+                                 x=4.5, y=0.5, z=0, collider='box', name="save_point", tag=self)
         self.pixel_art()
 
 
@@ -47,3 +47,17 @@ class Home(Map):
                         collider='box',
                         name="wall"
                     )
+
+    def save(self):
+        from src.components.save import Saver
+        from src.components import dialog
+        Saver.save(self)
+        dialog.dialog_sys.trigger(self.save_point, "进度已保存。")
+
+    def interaction(self, entity: Entity):
+        from src.components import dialog
+        interaction_mapping = {
+            "wall": lambda: dialog.dialog_sys.trigger(entity, "这墙看起来挺厚，上面有歪歪扭扭的刻字“38号入口”。"),
+            "save_point": self.save,
+        }
+        return interaction_mapping.get(entity.name, None)
