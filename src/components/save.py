@@ -18,4 +18,7 @@ class Saver:
         except FileNotFoundError:
             map_id = 'Home'
 
+        if not map_id:
+            map_id = 'Home'
+
         return map_mapping.get(map_id)

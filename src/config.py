@@ -41,19 +41,19 @@ class Config:
     def setup(self, map):
         from src.components.loop_handlers import LoopHandlers
         from src.components.input_handlers import InputHandler
-        from src.components import splash, dialog
+        from src.components import splash
 
         camera.orthographic = True
         camera.fov = self.FOV
         self.loop_handlers = LoopHandlers(player=map.player)
-
+        self.input_handlers = InputHandler(player=map.player)
         invoke(splash.end_splash, delay=self.SPLASH_TIME)
 
-
-        self.input_handlers = InputHandler(player=map.player)
         return self
 
-from src.maps import map_home
+from src.maps import map_home, map_hallway
+
 map_mapping = {
-    'Home': map_home.Home
+    'Home': map_home.Home,
+    'Hallway': map_hallway.Hallway
 }

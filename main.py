@@ -1,7 +1,7 @@
 from ursina import *
 from src.config import Config as conf
 
-app = Ursina(title='Zype', borderless=False, development_mode=conf.DEBUG)
+app = Ursina(title='ZypE', borderless=False, development_mode=conf.DEBUG)
 from src.components.game import Game
 game = Game()
 game.start()

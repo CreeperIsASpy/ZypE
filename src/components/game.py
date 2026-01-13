@@ -1,6 +1,6 @@
 from ursina import *
 
-from src.components import splash
+from src.components import splash, save, spawner
 
 
 class Game:
@@ -27,7 +27,6 @@ class Game:
         if not splash.splashed:
             return
 
-        dt = time.dt
 
         self.conf.loop_handlers.handle_movement(self.player)
         self.conf.loop_handlers.constrain_player(self.player)
@@ -38,3 +37,15 @@ class Game:
             quit()
         elif key == 'enter':
             self.conf.input_handlers.handle_interaction(self.player)
+
+    def switch_map(self, map):
+        from src.config import Config as conf
+        if self.player:
+            destroy(self.player)
+        if self.map:
+            destroy(self.map)
+        self.map_type = map
+        self.map = self.map_type(None)
+        self.player = spawner.player_spawner(self.map, self.map.size, False, 0, 0)
+        self.conf = conf.setup(conf, self.map)
+        self.map.player = self.player
