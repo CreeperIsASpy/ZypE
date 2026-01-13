@@ -1,7 +1,7 @@
 from ursina import *
 
 from src.maps.map import Map
-from src.components.spawner import random_entities_spawner, background_displayer
+from src.components.spawner import background_displayer
 from src.config import Config as conf
 
 class Home(Map):
