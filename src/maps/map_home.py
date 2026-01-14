@@ -24,6 +24,13 @@ class Home(Map):
                                  texture="assets/textures/save_point",
                                  scale=(1, 1), model="quad",
                                  x=4.5, y=0.5, z=0, collider='box', name="save_point", tag=self)
+
+        self.hallway = Entity(parent=self,
+                              origin=(-0.5, -0.5),
+                              texture="assets/textures/save_point",
+                              scale=(1, 1), model="quad",
+                              x=37.5, y=4.5, z=0, collider='box', name="hallway", tag=self)
+
         self.pixel_art()
 
 
@@ -54,10 +61,14 @@ class Home(Map):
         Saver.save(self)
         dialog.dialog_sys.trigger(self.save_point, "进度已保存。")
 
-    def interaction(self, entity: Entity):
+    def interaction(self, entity: Entity | None):
         from src.components import dialog
-        interaction_mapping = {
-            "wall": lambda: dialog.dialog_sys.trigger(entity, "这墙看起来挺厚，上面有歪歪扭扭的刻字“38号入口”。"),
-            "save_point": self.save,
-        }
-        return interaction_mapping.get(entity.name, None)
+        if entity:
+            interaction_mapping = {
+                "wall": lambda: dialog.dialog_sys.trigger(entity, "这墙看起来挺厚，上面有歪歪扭扭的刻字“38号入口”。"),
+                "save_point": self.save,
+                "hallway": lambda : None, # 语法提示：Lambda 中不能使用 pass，需要用 None
+            }
+            return interaction_mapping.get(entity.name, None)
+
+        return None

@@ -11,7 +11,7 @@ class Hallway(Map):
             size=(38, 9),
             parent=self,
             model='quad',
-            texture='assets/textures/home_tile',
+            texture='assets/textures/me',
         )
         self.map_id = 'Hallway'
         self.setup()

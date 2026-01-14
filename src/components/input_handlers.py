@@ -22,9 +22,14 @@ class InputHandler:
 
 
     def handle_interaction(self, player):
+        from src.components.dialog import dialog_sys
         hit_info = self.collision(player)
         if hit_info.entity:
             action = player.map.interaction(hit_info.entity)
 
             if action:
                 action()
+            else:
+                dialog_sys.trigger(hit_info.entity, f"你无法与 {hit_info.entity.name} 互动。")
+        else:
+            dialog_sys.trigger(hit_info.entity)
