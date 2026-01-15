@@ -6,8 +6,8 @@ from src.config import Config as conf
 
 class Home(Map):
     is_random = True
-    def __init__(self, player):
-        super().__init__(player, size=(38, 9))
+    def __init__(self, game, player):
+        super().__init__(game, player, size=(38, 9))
         self.background = background_displayer(
             size=(38, 9),
             parent=self,
@@ -63,11 +63,12 @@ class Home(Map):
 
     def interaction(self, entity: Entity | None):
         from src.components import dialog
+        from src.maps.map_hallway import Hallway
         if entity:
             interaction_mapping = {
                 "wall": lambda: dialog.dialog_sys.trigger(entity, "这墙看起来挺厚，上面有歪歪扭扭的刻字“38号入口”。"),
                 "save_point": self.save,
-                "hallway": lambda : None, # 语法提示：Lambda 中不能使用 pass，需要用 None
+                "hallway": lambda: self.game.switch_map(Hallway),
             }
             return interaction_mapping.get(entity.name, None)
 

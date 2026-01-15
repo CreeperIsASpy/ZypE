@@ -5,8 +5,8 @@ from src.components.spawner import background_displayer
 
 class Hallway(Map):
     is_random = True
-    def __init__(self, player):
-        super().__init__(player, size=(38, 9))
+    def __init__(self, game, player):
+        super().__init__(game, player, size=(38, 9))
         self.background = background_displayer(
             size=(38, 9),
             parent=self,

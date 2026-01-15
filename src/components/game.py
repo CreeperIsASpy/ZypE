@@ -18,7 +18,7 @@ class Game:
         from src.components import save
 
         self.map_type = save.Saver.load()
-        self.map = self.map_type(self.player)
+        self.map = self.map_type(self, self.player)
         self.conf = conf.setup(conf, self.map)
         self.player = spawner.player_spawner(self.map, self.map.size, False, 0, 0)
         self.map.player = self.player
@@ -45,7 +45,7 @@ class Game:
         if self.map:
             destroy(self.map)
         self.map_type = map
-        self.map = self.map_type(None)
+        self.map = self.map_type(self, None)
         self.player = spawner.player_spawner(self.map, self.map.size, False, 0, 0)
         self.conf = conf.setup(conf, self.map)
         self.map.player = self.player
