@@ -27,7 +27,7 @@ class Hallway(Map):
                                  x=4.5, y=0.5, z=0, collider='box', name="save_point")
 
         # 搞事牌
-        self.sb = SignBoard(text="欢迎来到礼堂，请入座。", x=9.5, y=3.5, z=0, collider="box", name="signboard", parent=self)
+        self.sb = SignBoard(text=langfile.get("hallway.interaction.signboard_entrance"), x=9.5, y=3.5, z=0, collider="box", name="signboard_entrance", parent=self)
 
     def save(self):
         from src.components.save import Saver
@@ -38,6 +38,6 @@ class Hallway(Map):
     def interaction(self, entity: Entity):
         interaction_mapping = {
             "save_point": self.save,
-            "signboard": self.sb.trigger
+            "signboard_entrance": self.sb.trigger
         }
         return interaction_mapping.get(entity.name, None)
