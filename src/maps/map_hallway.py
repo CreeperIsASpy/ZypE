@@ -2,6 +2,8 @@ from ursina import *
 
 from src.maps.map import Map
 from src.components.spawner import background_displayer
+from src.components.langfile import langfile
+from src.sprites.signboard import SignBoard
 
 class Hallway(Map):
     is_random = True
@@ -11,7 +13,7 @@ class Hallway(Map):
             size=(38, 9),
             parent=self,
             model='quad',
-            texture='assets/textures/me',
+            texture='assets/textures/hallway_tile',
         )
         self.map_id = 'Hallway'
         self.setup()
@@ -22,18 +24,20 @@ class Hallway(Map):
                                  origin=(-0.5, -0.5),
                                  texture="assets/textures/save_point",
                                  scale=(1, 1), model="quad",
-                                 x=4.5, y=0.5, z=0, collider='box', name="save_point", tag=self)
+                                 x=4.5, y=0.5, z=0, collider='box', name="save_point")
+
+        # 搞事牌
+        self.sb = SignBoard(text="欢迎来到礼堂，请入座。", x=9.5, y=3.5, z=0, collider="box", name="signboard", parent=self)
 
     def save(self):
         from src.components.save import Saver
         from src.components import dialog
         Saver.save(self)
-        dialog.dialog_sys.trigger(self.save_point, "进度已保存。")
+        dialog.dialog_sys.trigger(self.save_point, langfile.get("hallway.interaction.save_point"))
 
     def interaction(self, entity: Entity):
-        from src.components import dialog
         interaction_mapping = {
-            "wall": lambda: dialog.dialog_sys.trigger(entity, "这墙看起来挺厚，上面有歪歪扭扭的刻字“38号入口”。\n11111111"),
             "save_point": self.save,
+            "signboard": self.sb.trigger
         }
         return interaction_mapping.get(entity.name, None)

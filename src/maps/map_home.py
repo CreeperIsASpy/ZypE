@@ -1,5 +1,6 @@
 from ursina import *
 
+from src.components.langfile import langfile
 from src.maps.map import Map
 from src.components.spawner import background_displayer
 from src.config import Config as conf
@@ -59,14 +60,14 @@ class Home(Map):
         from src.components.save import Saver
         from src.components import dialog
         Saver.save(self)
-        dialog.dialog_sys.trigger(self.save_point, "进度已保存。")
+        dialog.dialog_sys.trigger(self.save_point, langfile.get("home.interaction.save_point"))
 
     def interaction(self, entity: Entity | None):
         from src.components import dialog
         from src.maps.map_hallway import Hallway
         if entity:
             interaction_mapping = {
-                "wall": lambda: dialog.dialog_sys.trigger(entity, "这墙看起来挺厚，上面有歪歪扭扭的刻字“38号入口”。"),
+                "wall": lambda: dialog.dialog_sys.trigger(entity, langfile.get("home.interaction.wall")),
                 "save_point": self.save,
                 "hallway": lambda: self.game.switch_map(Hallway),
             }

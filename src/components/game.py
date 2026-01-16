@@ -10,9 +10,6 @@ class Game:
         self.conf = None
 
     def start(self):
-        window.icon = 'assets/zype.ico'
-        window.fullscreen = False
-
         from src.components import spawner
         from src.config import Config as conf
         from src.components import save

@@ -1,7 +1,11 @@
 from ursina import *
 from src.config import Config as conf
 
-app = Ursina(title='ZypE', borderless=False, development_mode=conf.DEBUG)
+app = Ursina(title='ZypE', development_mode=conf.DEBUG)
+window.icon = 'assets/zype.ico'
+window.fullscreen = True
+window.borderless = False
+
 from src.components.game import Game
 game = Game()
 game.start()
