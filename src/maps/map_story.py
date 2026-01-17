@@ -14,6 +14,21 @@ class Story(Map):
         self.setup()
         self.update_slide()
 
+        # 添加背景音乐
+        self.background_music = Audio(
+            'assets/audio/story.mp3',
+            loop=True,
+            autoplay=True
+        )
+
+        # 每10秒自动切换幻灯片
+        self.slide_switcher = Sequence(
+            Wait(9.38),
+            Func(self.switch_slide),
+            loop=True
+        )
+        self.slide_switcher.start()
+
     def setup(self):
         self.presentation = Entity(
             parent=camera.ui,
@@ -41,13 +56,26 @@ class Story(Map):
             color=color.white
         )
 
+        self.page_number = Text(
+            parent=camera.ui,
+            text="",
+            scale=1.5,
+            origin=(0.5, 0.5),
+            position=(0.85, 0.45),
+            font='assets/fonts/5_Minecraft AE.ttf',
+            color=color.white
+        )
+
     def update_slide(self):
         """根据当前幻灯片编号更新图片和文字"""
         if self.current_slide > self.total_slides:
             # 幻灯片播放完毕，切换到主地图
+            self.background_music.fade_out(duration=3)
+            self.slide_switcher.pause()
             destroy(self.presentation)
             destroy(self.text_area)
             destroy(self.story_text)
+            destroy(self.page_number)
             self.game.switch_map(Home)
             return
 
@@ -56,11 +84,7 @@ class Story(Map):
 
         lang_key = f'story.content.{self.current_slide}'
         self.story_text.text = langfile.get(lang_key)
-
-    def input(self, key):
-        if key == "enter":
-            self.switch_slide()
-
+        self.page_number.text = f"{self.current_slide}/{self.total_slides}"
 
     def switch_slide(self):
         self.current_slide += 1
