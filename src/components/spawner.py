@@ -7,24 +7,25 @@ from src.sprites.player import Player
 
 player = None
 
-def player_spawner(map, limit, is_random=True, *position):
+def player_spawner(map, limit, is_random=True, hide=False, *position):
     global player
-    player = Player(map)
-    if is_random:
-        for _ in range(100):
-            rx = randint(-limit, limit)
-            ry = randint(-limit, limit)
+    player = Player(map, hide=hide)
+    if not hide:
+        if is_random:
+            for _ in range(100):
+                rx = randint(-limit, limit)
+                ry = randint(-limit, limit)
 
-            player.position = (rx, ry)
+                player.position = (rx, ry)
 
-            hit_info = player.intersects(ignore=[player, ])
-            if not hit_info.hit:
-                return player
-    else:
-        player.position = position
-        return player
+                hit_info = player.intersects(ignore=[player, ])
+                if not hit_info.hit:
+                    break
+        else:
+            player.position = position
 
-    raise RuntimeError("Cannot Spawn Player")
+
+    return player
 
 def random_entities_spawner(limit, times=10, steps=100,  *args, **kwargs):
     visited_positions = set()

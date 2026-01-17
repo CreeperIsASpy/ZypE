@@ -9,16 +9,19 @@ class Game:
         self.player = None
         self.conf = None
 
+    def _spawn_player(self):
+        """Spawns a player entity, hiding it if the current map is 'Story'."""
+        self.player = spawner.player_spawner(self.map, self.map.size, False, (self.map.map_id == 'Story'), 0, 0)
+        self.map.player = self.player
+
     def start(self):
-        from src.components import spawner
         from src.config import Config as conf
         from src.components import save
 
         self.map_type = save.Saver.load()
         self.map = self.map_type(self, self.player)
         self.conf = conf.setup(conf, self.map)
-        self.player = spawner.player_spawner(self.map, self.map.size, False, 0, 0)
-        self.map.player = self.player
+        self._spawn_player()
 
     def lc_update(self):
         if not splash.splashed:
@@ -43,6 +46,5 @@ class Game:
             destroy(self.map)
         self.map_type = map
         self.map = self.map_type(self, None)
-        self.player = spawner.player_spawner(self.map, self.map.size, False, 0, 0)
+        self._spawn_player()
         self.conf = conf.setup(conf, self.map)
-        self.map.player = self.player

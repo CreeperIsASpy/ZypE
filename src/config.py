@@ -51,9 +51,10 @@ class Config:
 
         return self
 
-from src.maps import map_home, map_hallway
+from src.maps import map_home, map_hall, map_story
 
 map_mapping = {
     'Home': map_home.Home,
-    'Hallway': map_hallway.Hallway
+    'Hall': map_hall.Hall,
+    'Story': map_story.Story
 }

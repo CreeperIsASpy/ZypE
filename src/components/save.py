@@ -16,9 +16,9 @@ class Saver:
             with open('save.dat', 'rb') as f:
                 map_id = pickle.load(f)
         except FileNotFoundError:
-            map_id = 'Home'
+            map_id = 'Story'
 
         if not map_id:
-            map_id = 'Home'
+            map_id = 'Story'
 
         return map_mapping.get(map_id)

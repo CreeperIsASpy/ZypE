@@ -13,8 +13,8 @@ class InputHandler:
         hit_info = boxcast(
             origin=player.position + Vec3(player.scale_x / 2, player.scale_y / 2, 0),
             thickness=(player.scale_x + conf.PLAYER_COLLISION_RADIUS, player.scale_y + conf.PLAYER_COLLISION_RADIUS),
-            ignore=[player, player.map.background, player.map],
-            debug=conf.DEBUG,
+            ignore=[player],
+            # debug=conf.DEBUG,
             direction=player.forward,
         )
 
@@ -29,7 +29,6 @@ class InputHandler:
 
             if action:
                 action()
-            else:
-                dialog_sys.trigger(hit_info.entity, f"你无法与 {hit_info.entity.name} 互动。")
+
         else:
             dialog_sys.trigger(hit_info.entity)

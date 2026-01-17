@@ -30,7 +30,7 @@ class Home(Map):
                               origin=(-0.5, -0.5),
                               texture="assets/textures/save_point",
                               scale=(1, 1), model="quad",
-                              x=37.5, y=4.5, z=0, collider='box', name="hallway", tag=self)
+                              x=37.5, y=4.5, z=0, collider='box', name="hall", tag=self)
 
         self.pixel_art()
 
@@ -64,12 +64,12 @@ class Home(Map):
 
     def interaction(self, entity: Entity | None):
         from src.components import dialog
-        from src.maps.map_hallway import Hallway
+        from src.maps.map_hall import Hall
         if entity:
             interaction_mapping = {
                 "wall": lambda: dialog.dialog_sys.trigger(entity, langfile.get("home.interaction.wall")),
                 "save_point": self.save,
-                "hallway": lambda: self.game.switch_map(Hallway),
+                "hall": lambda: self.game.switch_map(Hall),
             }
             return interaction_mapping.get(entity.name, None)
 
