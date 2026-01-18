@@ -12,3 +12,10 @@ wheels/
 
 # game save
 save.dat
+
+# compiler
+main.build
+main.dist
+main.onefile-build
+main.exe
+

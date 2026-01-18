@@ -56,21 +56,26 @@ class Home(Map):
                         name="wall"
                     )
 
-    def save(self):
+    def _save_action(self):
+        """执行存档动作并返回对话文本"""
         from src.components.save import Saver
-        from src.components import dialog
         Saver.save(self)
-        dialog.dialog_sys.trigger(self.save_point, langfile.get("home.interaction.save_point"))
+        return langfile.get("home.interaction.save_point")
 
     def interaction(self, entity: Entity | None):
-        from src.components import dialog
         from src.maps.map_hall import Hall
-        if entity:
-            interaction_mapping = {
-                "wall": lambda: dialog.dialog_sys.trigger(entity, langfile.get("home.interaction.wall")),
-                "save_point": self.save,
-                "hall": lambda: self.game.switch_map(Hall),
-            }
-            return interaction_mapping.get(entity.name, None)
+        if not entity:
+            return None
+
+        interaction_mapping = {
+            "wall": lambda: langfile.get("home.interaction.wall"),
+            "save_point": self._save_action,
+            "hall": lambda: self.game.switch_map(Hall),
+        }
+        
+        handler = interaction_mapping.get(entity.name)
+
+        if handler:
+            return handler()
 
         return None

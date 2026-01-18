@@ -7,6 +7,9 @@ class LoopHandlers:
 
     def handle_movement(self, player):
         """处理玩家的移动输入和物理碰撞"""
+        if not player.can_move:
+            return
+
         # X 轴移动逻辑
         dx = held_keys['right arrow'] - held_keys['left arrow']
         if dx != 0:  # 只有按键时才计算
@@ -43,5 +46,8 @@ class LoopHandlers:
 
     def update_camera(self, player):
         """相机跟随逻辑"""
+        if not player.can_move:
+            return
+
         camera.x = player.x
         camera.y = player.y

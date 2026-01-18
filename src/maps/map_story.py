@@ -21,7 +21,7 @@ class Story(Map):
             autoplay=True
         )
 
-        # 每10秒自动切换幻灯片
+        # 自动切换幻灯片
         self.slide_switcher = Sequence(
             Wait(9.38),
             Func(self.switch_slide),
