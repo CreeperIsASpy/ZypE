@@ -16,7 +16,7 @@ class Story(Map):
 
         # 添加背景音乐
         self.background_music = Audio(
-            'assets/audio/story.mp3',
+            'assets/audio/story.ogg',
             loop=True,
             autoplay=True
         )
